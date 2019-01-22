@@ -1,0 +1,186 @@
+% !TEX root = ../paper.tex
+
+
+% Table 1
+\begin{table*}[ht] 
+\centering
+\resizebox{\textwidth}{!}{ % adjust table width as textwidth
+\begin{tabular}{lcccccccc|c}
+\toprule
+System & MNLI-(m/mm) & QQP & QNLI & SST-2 & CoLA & STS-B & MRPC & RTE & \textbf{Average}\\
+ & 392k & 363k  & 108k & 67k & 8.5k & 5.7k & 86.0 & 61.7 & - \\
+\hline
+Pre-OpenAI SOTA & 80.6/80.1 & 66.1 & 82.3 & 93.2 & 35.0 & 81.0 & 86.0 & 61.7 & 74.0 \\
+BiLSTM+ELMo+Attn & 76.4/76.1 & 64.8 & 79.9 & 90.4 & 36.0 & 73.3 & 84.9 & 56.8 & 71.0 \\
+OpenAI GPT & 82.1/81.4 & 70.3 & 88.1 & 91.3 & 45.4 & 80.0 & 82.3 & 56.0 & 75.2 \\
+\hline
+$\rm BERT_{BASE}$ & 84.6/83.4 & 71.2 & 90.1 & 93.5  & 52.1 & 85.5 & 88.9 & 66.4 & 79.6 \\
+$\rm BERT_{LARGE}$ & \textbf{86.7/85.9} & \textbf{72.1} & \textbf{91.1} & \textbf{94.9} & \textbf{60.5} & \textbf{86.5} & \textbf{89.3} & \textbf{70.1} & \textbf{81.9}\\
+\bottomrule
+\end{tabular}} % } for \resizebox
+\caption{GLUE Test results, scored by the GLUE evaluation server. The number of training examples. The “Average” column is slightly different we exclude the problematic WNLI set. OpenAI GPT = (L=12, H=768, A=12); $\rm BERT_{BASE}$ = (L=12, H=768, A=12); $\rm BERT_{LARGE}$ = (L=24, H=1024, A=16). BERT and OpenAI GPT are single-model, single task. All results  obtained from \url{https://gluebenchmark.com/leaderboard} and \url{https://blog.openai. com/language-unsupervised/}.}
+\label{tab1}
+\end{table*}
+
+
+% \linewidth: width of current line
+% \columnwidth: width of single column
+% \textwidth:  width of whole text, \textwidth = n * \columnwidth + (n - 1) * \columnsep
+% \paperwidth: width of paper
+
+
+
+\section {Experiments} \label{sec4}
+In this section, we present BERT fine-tuning results on 11 NLP tasks.
+
+	\subsection {GLUE Datasets} \label{sec4.1}
+	The General Language Understanding Evaluation (GLUE) benchmark \citep{Alex2018} is a collection of diverse natural language understanding tasks. Most of the GLUE datasets have already existed for a number of years, but the purpose of GLUE is to (1) distribute these datasets with canonical Train, Dev, and Test splits, and (2) set up an evaluation server to mitigate issues with evaluation inconsistencies and Test set overfitting. GLUE does not distribute labels for the Test set and users must upload their predictions to the GLUE server for evaluation, with limits on the number of submissions.
+	The GLUE benchmark includes the following datasets, the descriptions of which were originally summarized in \citet{Alex2018}:
+	
+	\paragraph{MNLI} Multi-Genre Natural Language Inference is a large-scale, crowdsourced entailment classification task \citep{Adina2018}. Given a pair of sentences, the goal is to predict whether the second sentence is an \emph{entailment}, \emph{contradiction|}, or \emph{neutral} with respect to the first one.
+	\paragraph{QQP}  Quora Question Pairs is a binary classification task where the goal is to determine if two questions asked on Quora are semantically equivalent \citep{Chen2018}.
+	\paragraph{QNLI} Question Natural Language Inference is a version of the Stanford Question Answering Dataset \citep{Pranav2016} which has been converted to a binary classification task \citep{Alex2018}. The positive examples are (question, sentence) pairs which do contain the correct answer, and the negative examples are (question, sentence) from the same paragraph which do not contain the answer.
+	\paragraph{SST-2} The Stanford Sentiment Treebank is a binary single-sentence classification task consisting of sentences extracted form movie reviews with human annotations of their sentiment \citep{Richard2013}.
+	\paragraph{CoLA} The Corpus of Linguistic Acceptability is a binary single-sentence classification task, where the goal is to predict whether an English sentence is linguistically ``acceptable'' or not \citep{Warstadt2018}.
+	\paragraph{STS-B} The Semantic Textual Similarity Benchmark is a collection of sentence pairs draw from news headlines and other sources \citep{Daniel2017}. They were annotated with a score from 1 to 5 denoting how similar the two sentences are in terms of semantic meaning.
+	\paragraph{MRPC} Microsoft Research Paraphrase Corpus consists of sentence pairs automatically extracted from online new sources, with human annotations for whether the sentences in the pair are semantically equivalent \citep{William2005}.
+	\paragraph{RTE} Recognizing Textual Entailment is a binary entailment task similar to MNLI, but with mush less training data \citep{Luisa2009}.\footnote{Note that we only report single-task fine-tuning results in this paper. Multitask fine-tuning approach could potentially push the results even further. For example, we did observe substantial improvements on RTE from multi-task training with MNLI.}
+	\paragraph{WNLI} Winograd NLI is a small natural language inference dataset deriving from \citep{Hector2011}. The GLUE webpages notes that there are issues with the construction of this dataset\footnote{\url{https://gluebenchmark.com/faq}}, and every trained system that's been submitted to GLUE has performed worse than the 65.1 baseline accuracy of predicting the majority class. We therefor exclude this set out of fairness to OpenAI GPT. For our GLUE submission, we always predicted the majority class.
+
+	
+		\subsubsection{GLUE Results} \label{sec4.1.1}
+		To fine-tune on GLUE, we represent the input sequence or sequence pair as described in Section \ref{sec3}, and use the final hidden vector $C \in \R^H $ corresponding to the first input token ({\fontfamily{pcr}\selectfont[CLS]}) as the aggregate representation. This is demonstrated visually in Figure \ref{fig3} (a) and (b). The only new parameters introduced during fine-tuning is a classification layer $W \in \R^{K \times H}$ where $K$ is the number of labels. We compute a standard classification loss with $C$ and $W$, i.e., $log(softmax(CW^T))$.
+		
+		We use a batch size of 32 and 3 epochs over the data for all GLUE tasks. For each task, we ran fine-tunings with learning rates of 5e-5, 4e-5, 3e-5, and 2e-5 and selected the one that performed best on the Dev set. Additionally, for $\rm BERT_{LARGE}$ we found that fine-tuning was sometimes unstable on small data sets (i.e., some runs would produce degenerate results), so we ran several random restarts and selected the model that performed best on the Dev set. With random restarts, we use the same pre-trained checkpoint but perform different fine-tuning data shuffling and classifier layer initialization. We not that the GLUE data set distribution does not include the Test labels, and we only make a single GLUE evaluation server submission for each $\rm BERT_{BASE}$ and $\rm BERT_{LARGE}$.
+		
+		Results are presented in Table \ref{tab1}. Both $\rm BERT_{BASE}$ and $\rm BERT_{LARGE}$ outperform all existing systems on all tasks by a substantial margin, obtaining 4.4\% and 6.7\% respective average accuracy improvement over the state-of-the-art. Note that $\rm BERT_{BASE}$ and OpenAI GPT are nearly identical in terms of model architecture outside of the attention masking. For the largest and most widely reported GLUE task, MNLI, BERT obtains a 4.7\% absolute accuracy improvement over the state-of-the-art. On the official GLUE leaderboard\footnote{https://gluebenchmark.com/leaderboard}, $\rm BERT_{LARGE}$ obtains a score of 80.4, compared to the top leaderboard system, OpenAI GPT, which obtains 72.8 as of the date of writing.
+		
+		It is interesting to observe that $\rm BERT_{LARGE}$ significantly outperforms $\rm BERT_{BASE}$ across all tasks, even those with very little training data. The effect of BERT model size is explored more thoroughly in Section \ref{sec5.2}.
+		
+		
+	\subsection{SQuAD v1.1} \label{sec4.2}
+	The Stanford Question Answering Dataset (SQuAD) is a collection of 100k crowdsourced question/answer pairs \citep{Pranav2016}. Given a question and a paragraph from Wikipedia containing the answer, the task is to predict the answer text span in the paragraph. For example:
+	
+		\begin{itemize}
+			\setlength{\itemsep}{1em} % space between items
+			\item Input Question: \par {\small {\fontfamily{pcr}\selectfont Where do water droplets collide with ice crystals to form precipitation?}} %{\small} to avoid influencing \item
+			\item Input Paragraph: \par {\small{\fontfamily{pcr}\selectfont ...  Precipitation forms as smaller droplets coalesce via collision with other rain drops or ice crystals within a cloud.  ...}} 
+			\item Output Answer: \par {\small{\fontfamily{pcr}\selectfont within a cloud}} 
+		\end{itemize}
+		
+	This type of span prediction task is quite different from the sequence classification tasks of GLUE, but we are able to adapt BERT to run on SQuAD in a straightforward manner. Just as with GLUE, we present the input question and paragraph as a single packed sequence, with the question using the {\fontfamily{pcr}\selectfont A} embedding and the paragraph using the {\fontfamily{pcr}\selectfont B} embedding. The only new parameters learned during fine-tuning are a start vector $S \in \R^H$ and an end vector $E \in \R^H$. Let the final hidden vector from BERT for the $i^{th}$ input token be denoted as $T_i \in \R^H$. See Figure \ref{fig3}(c) for a visualization. Then, the probability of word $i$ being the start of the answer span is computed as a dot product between $T_i$ and $S$ followed by a softmax over all of the words in the paragraph:
+	
+	$$P_i = \frac{e^{S \cdot T_i}}{\sum_j e^{S \cdot T_j}}$$
+	
+	The same formula is used for the end of the answer span, and the maximum scoring span is used as the prediction. The training objective is the log-likelihood of the correct start and end positions. 
+	
+	We train for 3 epochs with a learning rate of 5e-5 and a batch size of 32. At inference time, since the end prediction is not conditioned on the start, we add the constraint that the end must come after the start, but no other heuristics are used. The tokenized labeled span is aligned back to the original untokenized input for evaluation.
+	
+	Results are presented in Table \ref{tab2}. SQuAD uses a highly rigorous testing procedure where the submitter must manually contact the SQuAD organizers to run their system on a hidden test set, so we only submitted our best system for testing. The result shown in the table is our first and only Test submission to SQuAD. We note that the top results from the SQuAD leaderboard do not have up-to-date public system descriptions available, and are allowed to use any public data when training their systems. We therefore use very modest data augmentation in our submitted system by jointly training on SQuAD and TriviaQA \citep{Mandar2017}.
+	
+	Our best performing system outperforms the top leaderboard system by +1.5 F1 in ensembling and +1.3 F1 as a single system. In fact, our single BERT model outperforms the top ensemble system in terms of F1 score. If we fine-tune on only SQuAD (without TriviaQA) we lose 0.1-0.4 F1 and still outperform all existing systems by a wide margin.
+	
+	\begin{table}[!t]
+	\centering
+	\resizebox{\columnwidth}{!}{ % adjust table width as column width and height changes corespondingly
+	\begin{tabular}{lcccc}
+	\toprule
+	\multicolumn{1}{c}{System} &\multicolumn{2}{c}{Dev} & \multicolumn{2}{c}{Test} \\ % \multicolumn{num}{pos}{content}
+	 & EM & F1 & EM & F1 \\
+	\midrule
+	\multicolumn{5}{c}{Leaderboard(Oct 8th, 2018)} \\
+	Human & - & - & 82.3 & 91.2 \\
+	\#1 Ensemble - nlnet & - & - & 86.0 & 91.7 \\
+	\#2 Ensemble - QANet & - & - & 84.5 & 90.5 \\
+	\#1 Single - nlnet & - & - & 83.5 & 90.1 \\
+	\#2 Single - QANet & - & - & 82.5 & 89.3 \\
+	\midrule
+	\multicolumn{5}{c}{Published} \\
+	BiDAF+ELMo (Single) & - & 85.8 & - & - \\
+	R.M.Reader (Single) & 78.9 & 86.3 & 79.5 & 86.6 \\
+	R.M.Reader (Ensemble) & 81.2 & 87.9 & 82.3 & 88.5 \\
+	\midrule
+	\multicolumn{5}{c}{Ours} \\
+	$\rm BERT_{BASE}$ (Single) & 80.9 & 88.5 & - & - \\
+	$\rm BERT_{LARGE}$ (Single) & 84.1 & 90.9 & - & - \\
+	$\rm BERT_{LARGE}$ (Ensemble) & 85.8 & 91.8 & - & - \\
+	$\rm BERT_{LARGE}$ (Sgl.+TriviaQA) & \textbf{84.2} & \textbf{91.1} & \textbf{85.1} & \textbf{91.8} \\
+	$\rm BERT_{LARGE}$ (Ens.+TriviaQA) & \textbf{86.2} & \textbf{92.2} & \textbf{87.4} & \textbf{93.2} \\
+	\bottomrule
+	\end{tabular}}
+	\caption{SQuAD results. The BERT ensemble is 7x systems which use different pre-training checkpoints and fine-tuning seeds.}
+	\label{tab2}
+	\end{table}
+	
+	\subsection{Named Entity Recognition} \label{sec4.3}
+	To evaluate performance on a token tagging task, we fine-tune BERT on the CoNLI 2003 Named Entity Recognition (NER) dataset. This dataset consists of 200k training words which have been annotated as {\fontfamily{pcr}\selectfont Person, Organization, Location, Miscellaneous}, or {\fontfamily{pcr}\selectfont Other} (non-named entity).
+	
+	For fine-tuning, we feed the final hidden representation $T_i \in \R^H$ for to each token $i$ into a classification layer over the NER label set. The predictions are not conditioned on the surrounding predictions (i.e., non-autoregressive and no CRF). To make this compatible with WordPiece tokenization, we feed each CoNLI-tokenized input word into our WordPiece tokenizer and use the hidden state corresponding to the first sub-token as input to the classifier. For example:
+	
+	\begin{table}[h]
+	\centering
+	\resizebox{\columnwidth}{!}{
+	\begin{tabular}{lllllll}
+	{\fontfamily{pcr}\selectfont Jim} & {\fontfamily{pcr}\selectfont Hen} & {\fontfamily{pcr}\selectfont \#\#son} & {\fontfamily{pcr}\selectfont was} & {\fontfamily{pcr}\selectfont a} & {\fontfamily{pcr}\selectfont puppet} & {\fontfamily{pcr}\selectfont \#\#eer} \\
+	{\fontfamily{pcr}\selectfont I-PER} & {\fontfamily{pcr}\selectfont I-PER} & {\fontfamily{pcr}\selectfont X} & {\fontfamily{pcr}\selectfont 0} & {\fontfamily{pcr}\selectfont 0} & {\fontfamily{pcr}\selectfont 0} & {\fontfamily{pcr}\selectfont X} \\
+	\end{tabular}}
+	\end{table}
+	
+	Where no prediction is made for {\fontfamily{pcr}\selectfont X}. Since the WordPiece tokenization boundaries are a know part of the input, this is done for both training and test. A visual representation is also given in Figure \ref{fig3} (d). A caed WordPiece model is used for NER, wheres an uncased model is used for all other tasks. 
+	
+	\begin{table}[!t]
+	\centering
+	\resizebox{\columnwidth}{!}{
+	\begin{tabular}{lcc}
+	\toprule
+	System & Dev F1 & Test F1 \\
+	\midrule
+	ELMo+BiLSTM+CRF & 95.7 & 92.2 \\
+	CVT+Multi \citep{Kevin2018} & - & 92.6 \\
+	\midrule
+	$\rm BERT_{BASE}$ & 96.4 & 92.4 \\
+	$\rm BERT_{LARGE}$ & 96.6 & 92.8 \\ 
+	\bottomrule
+	\end{tabular}}
+	\caption{CoNLL-2003 Named Entity Recognition re- sults. The hyperparameters were selected using the Dev set, and the reported Dev and Test scores are aver- aged over 5 random restarts using those hyperparame- ters.}
+	\label{tab3}
+	\end{table}
+	
+	Results are presented in Table \ref{tab3}. $\rm BERT_{LARGE}$ outperforms the existing SOTA, Cross-View Training with multi-task learning \citep{Kevin2018}, by +0.2 on CoNLI-2003 NER Test.
+	
+	\subsection{SWAG} \label{sec4.4}
+	The Situations With Adversarial Generations (SWAG) dataset contains 113k sentence-pair completion examples that evaluate grounded commonsense inference \citep{Rowan2018}.
+	
+	Given a sentence from a video captioning dataset, the task is to decide among four choices the most plausible continuation. For example:
+	
+	Adapting BERT to the SWAG dataset is similar to the adaptation for GLUE. For each example, we construct four input sequences, which each contain the concatenation of the given sentence (sentence {\fontfamily{pcr}\selectfont A}) and a possible continuation (sentence {\fontfamily{pcr}\selectfont B}). The only task-specific parameters we introduce is a vector $V \in \R^H$, whose dot product with the final aggregate representation $C_i \in \R^H$ denotes a score for each choice $i$. The probability distribution is the softmax over the four choices:
+	
+	$$P_i = \frac{e^{V \cdot C_i}}{\sum_{j=1}^4e^{V \cdot C_j}}$$
+	
+	We fine-tune the model for 3 epochs with a learning rate of 2e-5 and a batch size of 16. Results are presented in Table \ref{tab4}. $\rm BERT_{LARGE}$ out-performs the authors' baseline ESIM+ELMo system by +27.1\%.
+	
+	\begin{table}[!pt]
+	\centering
+	\begin{tabular}{lcc}
+	\toprule
+	System & Dev & Test \\
+	\midrule
+	ESIM+GloVe & 51.9 & 52.7 \\
+	ESIM+ELMo & 59.1 & 59.2 \\
+	\midrule
+	$\rm BERT_{BASE}$ & 81.6 & - \\
+	$\rm BERT_{LARGE}$ & 86.6 & 86..3 \\
+	\midrule
+	Humam & - & 85.0 \\
+	Human (5 annotations) & - & 88.0 \\
+	\bottomrule
+	\end{tabular}
+	\caption{SWAG Dev and Test accuracies. Test results were scored against the hidden labels by the SWAG au- thors. †Human performance is measure with 100 sam- ples, as reported in the SWAG paper.}
+	\label{tab4}
+	\end{table}
+	
+	
+	
+	
+	
+	

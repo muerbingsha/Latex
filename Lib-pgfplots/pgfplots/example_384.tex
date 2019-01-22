@@ -1,0 +1,58 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\pgfplotsset{every axis/.append style={%
+	width=6cm,
+	xmin=7e-3,xmax=7e-2,
+	extra x ticks={3e-2,6e-2},
+	extra x tick style={major tick length=0pt,font=\footnotesize}
+}}%
+
+\begin{tikzpicture}%
+	\begin{loglogaxis}[
+		xtick={1e-2},
+		title=with minor tick identification,
+		extra x tick style={
+			log identify minor tick positions=true}]
+	\addplot coordinates {
+		(1e-2,10)
+		(3e-2,100)
+		(6e-2,200)
+	};
+	\end{loglogaxis}
+\end{tikzpicture}%
+
+\begin{tikzpicture}%
+	\begin{loglogaxis}[
+		xtick={1e-2},
+		title=without minor tick identification,
+		extra x tick style={
+			log identify minor tick positions=false}]
+	\addplot coordinates {
+		(1e-2,10)
+		(3e-2,100)
+		(6e-2,200)
+	};
+	\end{loglogaxis}%
+\end{tikzpicture}%
+\end{document}

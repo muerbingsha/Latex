@@ -1,0 +1,45 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+
+\begin{document}
+\pgfplotstableset{
+	create on use/new/.style={
+		create col/expr={\pgfmathaccuma + \thisrow{level}}},
+	create on use/new2/.style={
+		create col/expr accum={\pgfmathaccuma * \thisrow{level}}{1}%<- start with `1'
+	}
+}
+
+\pgfplotstabletypeset[
+	columns={level,new,new2},
+	columns/new/.style={column name=$\sum$level},
+	columns/new2/.style={column name=$\prod$level}
+]{pgfplotstable.example1.dat}
+\end{document}

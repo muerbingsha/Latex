@@ -1,0 +1,36 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+\usepackage{pgfplotstable}
+
+\begin{document}
+\pgfplotstabletypeset[columns={maxlevel,L2}]{plotdata/newexperiment1.dat}
+
+\begin{tikzpicture}
+	\begin{semilogyaxis}[
+		xlabel=\texttt{maxlevel}$ + 10$
+	]
+	\addplot table
+		[x expr=\thisrow{maxlevel}+10, y=L2] 
+		{plotdata/newexperiment1.dat};
+	\end{semilogyaxis}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,73 @@
+\documentclass[12pt, a4paper, twocolumn]{article}
+
+
+
+%----start preemble----
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fontspec} % require LuaLatex engine
+\setmainfont{Times New Roman}
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm, columnsep=0.6cm] {geometry} % page pattern
+\definecolor{refblue}{RGB}{17, 17, 150} % ref color
+\usepackage[colorlinks=true, linkcolor=refblue, citecolor=refblue, urlcolor=refblue]{hyperref} % citecolor for ref, urlcolor for url, linkcolor for \ref
+% citecolor: ref number color(in text), default is greent
+\usepackage[sectionbib, round]{natbib}
+\usepackage{booktabs} % for table line
+\usepackage{multirow}
+\usepackage{authblk}
+\renewcommand{\Affilfont}{\normalsize} % adjust affil and email
+\renewcommand{\Authands}{\quad} % remove and before last author
+\renewcommand{\Authsep}{\quad}  % style between authors
+\setlength{\affilsep}{0.1em}% line space between author and affiliation
+\usepackage{bm} % for bold in $$, because \textbf doesn't work
+\usepackage{amsfonts} % for math alphabet
+\newcommand{\R}{\mathbb{R}}
+\usepackage{pgfplots} % for fig4
+\pgfplotsset{width=\columnwidth, compat=newest}
+\renewenvironment{abstract}  % for abstract with more margin than text
+{
+\begin{center}
+\bfseries \large{\abstractname} \vspace{-0.8em} % bfseries: bold; vspace: vertical line space
+\end{center}
+\list{}{
+\setlength{\leftmargin}{0.5cm}
+\setlength{\rightmargin}{\leftmargin}
+\item\relax %\relax does nothing but stops expansion
+}
+}
+
+
+%----end preemble----
+
+\begin{document}
+
+
+
+
+% title
+\title{\textbf{BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding }}
+% \author{\textbf{Jacob Devlin} \and \textbf{Ming-Wei Chang} \and \textbf{Kenton Lee} \and \textbf{Kristina Toutanova}} % standard
+\author{\textbf{Jacob Devlin}}
+\author{\textbf{Ming-Wei Chang}}
+\author{\textbf{Kenton Lee}}
+\author{\textbf{Kristina Toutanova}}
+\affil{Google AI Language \large{\authorcr{\{jacobdevlin,mingweichang,kentonl,kristout\}@google.com}}}
+
+\date{}
+\maketitle
+
+\input parts/abstract.tex
+\input parts/intro.tex
+\input parts/related.tex
+\input parts/bert.tex
+\input parts/experiments.tex
+\input parts/ablation.tex
+\input parts/conclude.tex
+
+% biblio
+\bibliographystyle{plainnat}
+\bibliography{ref}
+
+\end{document}
+
+

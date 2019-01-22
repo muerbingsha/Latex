@@ -1,0 +1,31 @@
+
+\section{Introduction}
+
+Language model pre-training has shown to be effective for improving many natural language processing tasks \citep{Andrew2015, Matthew2017, Matthew2018, Alec2018, Jeremy2018}. These tasks include sentence-level tasks such as natural language inference \citep{Samuel2015, Adina2018} and paraphrasing \citep{William2005}, which aim to predict the relationships between sentences by analyzing them holistically, as well as token-level tasks such as named entity recognition \citep{Erik2003} and SQuAD question answering \citep{Pranav2016}, where models are required to produce fine-grained output at the token-level.
+
+There are two existing strategies for applying pre-trained language representations to downstream tasks: \emph{feature-based} and \emph{fine-tuning}. The feature-based approach, such as ELMo \citep{Matthew2018}, uses tasks-specific architectures that include the pre-trained representations as additional features. The fine-tuning approach, such as the Generative Pre-trained Transformer (OpenAI GPT) \citep{Alec2018}, introduces minimal task-specific parameters, and is trained on the downstream tasks by simply fine-tuning the pre-trained parameters. In previous work, both approaches share the same objective function during pre-training, where they use unidirectional language models to learn general language representations.
+
+We argue that current techniques severely restrict the power of the pre-trained representations, especially for the fine-tuning approaches. The major limitation is that standard language models are unidirectional, and this limits the choice of architectures that can be used during pre-training. For example, in OpenAI GPT, the authors use a left-to-right architecture, where every token can only attended to previous tokens in the self-attention layers of the Transformer \citep{Ashish2017}. Such restrictions are sub-optimal for sentence-level tasks, and could be devastating when applying fine-tuning based approaches to token-level tasks such as SQuAD question answering \citep{Pranav2016}, where it is crucial to incorporate context from both directions.
+
+In this paper, we improve the fine-tuning based approaches by proposing BERT: \textbf{B}idirectional \textbf{E}ncoder \textbf{R}epresentations from \textbf{T}ransformers. BERT addresses the previously mentioned unidirectional constraints by proposing a new pre-training objective: the "masked language model" (MLM), inspired by the Cloze task \citep{Wilson1953}. The masked language model randomly masks some of the tokens from the input, and the objective is to predict the original vocabulary id of the masked word based only on its context. Unlike left-to-right language model pre-training, the MLM objective allows the representation to fuse the left and the right context, which allows us to pre-train a deep bidirectional Transformer. In addition to the masked language model, we also introduce a "next sentence prediction" task that jointly pre-trains text-pair representations. 
+
+The Contributions of our paper are as follows:
+\begin{itemize}
+	\item We demonstrate the importance of bidirectional pre-training for language representations. Unlike \citet{Alec2018}, which uses unidirectional language models for pre-training, BERT uses masked language models to enable pre-training deep bidirectional representations. This is also in contrast to \citet{Matthew2018}, which uses a shallow concatenation of independently trained left-to-right and right-to-left LMs.
+	\item We show that pre-trained representations eliminate the needs of many heavily-engineered task-specific architectures. BERT is the first fine-tuning based representation model that achieves state-of-the-art performance on a large suite of sentence-level \emph{and} token-level tasks, outperforming many systems with task-specific architectures.
+	\item BERT advances the state-of-the-art for eleven NLP tasks. We also report extensive ablations of BERT, demonstrating that the bidirectional nature of our model is the single most important new contribution. The code and pre-trained model will be available at \url{goo.gl/language/bert}.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

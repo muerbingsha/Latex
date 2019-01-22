@@ -1,0 +1,47 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+
+\begin{document}
+\pgfplotstabletypeset[
+	columns/error1/.style={
+		column name=$L_2$,
+		sci,sci zerofill,sci subscript,
+		precision=3},
+	columns/error2/.style={
+		column name=$A$,
+		sci,sci zerofill,sci subscript,
+		precision=2},
+	columns/dof/.style={
+		int detect,
+		column name=\textsc{Dof}
+	}
+]
+	{pgfplotstable.example1.dat}
+\end{document}

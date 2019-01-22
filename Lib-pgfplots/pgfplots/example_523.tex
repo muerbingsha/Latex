@@ -1,0 +1,46 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+
+\begin{document}
+\pgfplotstablesort\result{%
+    a      b  c 
+    19     2 [a]
+    -6   -14 [b]
+     4   -14 [c]
+   -11    -9 [d]
+    11    14 [e]
+    -9    -9 [f]
+     1    13 [g]
+     8   -10 [h]
+    16    18 [i]
+    19    -6 [j]
+}
+\pgfplotstabletypeset[columns/c/.style={string type}]{\result}%
+\end{document}

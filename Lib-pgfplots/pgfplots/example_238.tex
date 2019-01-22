@@ -1,0 +1,41 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+	grid=both,minor tick num=1,
+	xlabel=$x$,ylabel=$y$,
+	3d box,
+]
+	\addplot3 graphics[
+		points={
+			(1,1,1)    => (205,48)
+			(10,1,10)  => (503,324)
+			(1,1,4.044)=> (206,102)
+			(10,10,10) => (390,398)
+		}
+	]
+	{plotdata/plotgraphics3.png};
+\end{axis}
+\end{tikzpicture}
+\end{document}

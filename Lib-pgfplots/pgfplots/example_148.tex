@@ -1,0 +1,43 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel=$x$,
+		ylabel=$y$,
+		zlabel={$f(x,y) = x\cdot y$},
+		title=A Scatter Plot Example]
+	% `pgfplotsexample4_grid.dat' contains a
+	% large sequence of input points of the form
+	% x_0   x_1     f(x)    
+	% 0     0       0       
+	% 0     0.03125 0       
+	% 0     0.0625  0       
+	% 0     0.09375 0       
+	% 0     0.125   0       
+	% 0     0.15625 0       
+	\addplot3+[only marks] table
+		{plotdata/pgfplotsexample4_grid.dat};
+	\end{axis}
+\end{tikzpicture}
+\end{document}

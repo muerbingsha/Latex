@@ -1,0 +1,6 @@
+\documentclass[12pt]{report}
+\begin{document}
+\def\multi#1{(#1, #1)}
+\edef\multi#1{[\multi{#1}, \multi{#1}]}
+\multi{X}
+\end{document}

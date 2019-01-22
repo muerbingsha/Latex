@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage{filecontents}
+\usepackage[citestyle=authoryear,natbib]{biblatex}
+\usepackage{geometry}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=gray,      
+    urlcolor=blue,
+    citecolor=blue,
+}
+
+\begin{filecontents}{mybib.bib}
+@unpublished{Survey2014,
+  title={Survey on the access to
+finance of enterprises},
+  author={Sophie Doove and Petra Gibcus and
+Ton Kwaak and Lia Smit and Tommy Span},
+  year=2014,
+  note ={Accessed 16 June 2017.  \href{http://wwwe.ansa.it/documents/1415814222451\_Rapporto.pdf/}{http://wwwe.ansa.it/documents/1415814222451\_Rapporto.pdf/}},
+}
+\end{filecontents}
+
+\bibliography{mybib}
+
+\begin{document}
+For example, a survey in \citet{Survey2014} showed that many enterprises encountered capital shortage.
+\printbibliography
+
+\end{document}

@@ -1,0 +1,47 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+
+\begin{document}
+% requires \usepackage{booktabs}
+\pgfplotstableset{
+	every head row/.style={before row=\toprule,after row=\midrule},
+	every last row/.style={after row=\bottomrule}}
+
+\pgfplotstabletypeset[string type]{pgfplotstable.example2.dat}%
+~
+\pgfplotstabletypeset[
+	columns={A,B,A,B},
+	display columns/0/.style={select equal part entry of={0}{2},string type},% first part of `A'
+	display columns/1/.style={select equal part entry of={0}{2},string type},% first part of `B'
+	display columns/2/.style={select equal part entry of={1}{2},string type},% second part of `A'
+	display columns/3/.style={select equal part entry of={1}{2},string type},% second part of `B'
+]
+	{pgfplotstable.example2.dat}
+\end{document}

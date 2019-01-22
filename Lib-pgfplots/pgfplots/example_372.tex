@@ -1,0 +1,45 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{tikzpicture}
+	\begin{loglogaxis}[
+		% some descriptions:
+		table/x=Basis,
+		table/y={L2/r},
+		xlabel=Degrees of Freedom,
+		ylabel=relative Error,
+		title=New Experiments (old in gray),
+		legend entries={$e_1$,$e_2$,$e_3$}
+	]
+	\addplot[black!15,forget plot] 
+		table {plotdata/oldexperiment1.dat};
+	\addplot[black!15,forget plot] 
+		table {plotdata/oldexperiment2.dat};
+	\addplot[black!15,forget plot] 
+		table {plotdata/oldexperiment3.dat};
+	\addplot table {plotdata/newexperiment1.dat};
+	\addplot table {plotdata/newexperiment2.dat};
+	\addplot table {plotdata/newexperiment3.dat};
+	\end{loglogaxis}
+\end{tikzpicture}
+\end{document}

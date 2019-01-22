@@ -1,0 +1,17 @@
+
+\section {Related Work}
+There is a long history of pre-training general language representations, and we briefly review the most popular approaches in this section. 
+
+\subsection {Feature-based Approaches}
+Learning widely applicable representations of words has been an active area of research for decades, including non-neural \citep{Peter1992, Rie2005, John2006} and neural \citep{Ronan2008, Tomas2013, Jeffrey2014} methods. Pre-trained word embeddings are considered to be an integral part of modern NLP systems, offering significant improvements over embeddings learned from scratch \citep{Joseph2010}.
+
+These approaches have been generalized to coarser granularities, such as sentence embeddings \citep{Ryan2015, Lajanugen2018} or paragraph embeddings \citep{Quoc2014}. As with traditional word embeddings, these learned representations are also typically used as features in a downstream model.
+
+ELMo \citep{Matthew2017} generalized traditional word embedding research along a different dimension. They propose to extract \emph{context-sensitive} features from a language model. When integrating contextual word embeddings with existing task-specific architectures, ELMo advances the state-of-the-art for several major NLP benchmarks \citep{Matthew2018} including question answering \citep{Pranav2016} on SQuAD, sentiment analysis \citep{Richard2013}, and named entity recognition \citep{Erik2003}.
+
+\subsection {Fine-tuning Approaches}
+A recent trend in transfer learning from language models (LM) is to pre-train some model architecture on a LM objective before fine-tuning that same model for a supervised downstream task \citep{Andrew2015, Jeremy2018, Alec2018}. The advantage of these approaches is that few parameters need to be learned from scratch. At least partly due this advantage, OpenAI GPT \citep{Alec2018} achieved previously state-of-the-art results on many sentence-level tasks from the GLUE benchmark \citep{Alex2018}.
+
+\subsection {Transfer Learning from Supervised Data}
+While the advantage of unsupervised pre-training is that there is a nearly unlimited amount of data available, there has also been work showing effective transfer from supervised tasks with large datasets, such as natural language inference \citep{Alexis2017} and machine translation \citep{Bryan2017}. Outside of NLP, computer vision research has also demonstrated the importance of transfer learning from large pre-trained models, where an effective recipe is to fine-tune models pre-trained on ImageNet \citep{Deng2009, Jason2014}.
+

@@ -1,0 +1,42 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepgfplotslibrary{units}
+\usepgfplotslibrary{units}
+
+\begin{document}
+\begin{tikzpicture}
+  \begin{axis}[use units,
+    x unit=m,x unit prefix=k,
+    y unit=N,y unit prefix=m,
+    xlabel=Distance,ylabel=Force]
+    \addplot coordinates {
+        (1,2.3)
+        (2,2.7)
+        (3,2.1)
+        (4,1.8)
+        (5,1.5)
+        (6,1.1)
+    };
+  \end{axis}
+\end{tikzpicture}
+\end{document}

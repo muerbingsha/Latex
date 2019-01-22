@@ -1,0 +1,56 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+\usepackage{pgfcalendar}
+
+\begin{document}
+% Requires 
+% \usepackage{pgfcalendar}
+\pgfplotstableset{columns={date,account1}}
+
+% plotdata/accounts.dat contains:
+%
+% date              account1  account2  account3
+% 2008-01-03        60        1200      400
+% 2008-02-06        120       1600      410
+% 2008-03-15        -10       1600      410
+% 2008-04-01        1800      500       410
+% 2008-05-20        2300      500       410
+% 2008-06-15        800       1920      410
+
+% Show the contents in `string type':
+\pgfplotstabletypeset[
+	columns/date/.style={string type}
+]{plotdata/accounts.dat}
+\hspace{1cm}
+% Show the contents in `date type':
+\pgfplotstabletypeset[
+	columns/date/.style={date type={\monthname\ \year}}
+]{plotdata/accounts.dat}
+\end{document}

@@ -1,0 +1,56 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{tikzpicture}
+\pgfplotsset{every axis/.append style={
+cycle list={
+	{red,only marks,mark options={
+		fill=red,scale=0.8},mark=*},
+	{black,only marks,mark options={
+		fill=black,scale=0.8},mark=square*}}}}
+
+\begin{axis}[width=4cm,scale only axis,
+	name=main plot]
+\addplot file 
+	{plotdata/pgfplots_scatterdata1.dat};
+\addplot file 
+	{plotdata/pgfplots_scatterdata2.dat};
+\addplot[blue] coordinates {
+	(0.093947,	-0.011481)
+	(0.101957,	0.494273)
+	(0.109967,	1.000027)};
+\end{axis}
+
+\begin{axis}[
+	at={(main plot.below south west)},yshift=-0.1cm,
+	anchor=north west,
+	width=4cm,scale only axis,height=0.8cm,
+	ytick=\empty]
+
+\addplot file 
+  {plotdata/pgfplots_scatterdata1_latent.dat};
+\addplot file 
+  {plotdata/pgfplots_scatterdata2_latent.dat};
+\end{axis}
+\end{tikzpicture}
+\end{document}

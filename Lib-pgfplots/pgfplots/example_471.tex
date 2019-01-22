@@ -1,0 +1,42 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+
+\begin{document}
+% requires \usepackage{array}
+\pgfplotstabletypeset[
+	use comma,
+	columns={dof,error1,error2,info,{grad(log(dof),log(error2))}},
+	columns/error1/.style={dec sep align,sci zerofill},
+	columns/error2/.style={sci,sci subscript,sci zerofill,dec sep align},
+	columns/info/.style={fixed,dec sep align},
+	columns/{grad(log(dof),log(error2))}/.style={fixed,dec sep align,fixed zerofill}
+]
+	{pgfplotstable.example1.dat}
+\end{document}

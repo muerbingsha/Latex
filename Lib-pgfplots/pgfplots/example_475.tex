@@ -1,0 +1,58 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\usepackage{pgfplotstable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{pgfplotstable}
+
+\begin{document}
+% \usepackage{booktabs}
+\pgfplotstabletypeset[
+	column type=l,
+	every head row/.style={
+		before row={%
+			\toprule
+			& \multicolumn{2}{c}{Singular} & \multicolumn{2}{c}{Plural}\\
+		},
+		after row=\midrule,
+	},
+	every last row/.style={
+		after row=\bottomrule},
+	columns/person/.style       ={column name=},
+	columns/singGaeilge/.style  ={column name=Gaeilge},
+	columns/pluralGaeilge/.style={column name=Gaeilge},
+	columns/singEnglish/.style  ={column name=English},
+	columns/pluralEnglish/.style={column name=English},
+	col sep=&,row sep=\\,
+	string type,
+]{
+person & singEnglish  & singGaeilge & pluralEnglish  & pluralGaeilge\\
+1st    & at me        & agam        & at us          & againn\\
+2st    & at you       & agat        & at you         & agaibh\\
+3st    & at him       & aige        & at them        & acu\\
+       & at her       & aici        &                &\\
+}
+\end{document}

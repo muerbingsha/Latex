@@ -1,0 +1,59 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\pgfplotsset{every axis/.append style={width=5.3cm}}
+\begin{tikzpicture}
+\begin{loglogaxis}[
+	title=Explicitly Provided Limits,
+	xtickten={1,2},
+	ytickten={-5,-6}]
+\addplot coordinates 
+	{(10,1e-5) (20,5e-6) (40,2.5e-6)};
+\end{loglogaxis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{loglogaxis}[
+	title=With Extra Ticks,
+	xtickten={1,2},
+	ytickten={-5,-6},
+	extra x ticks={20,40},
+	extra y ticks={5e-6,2.5e-6}]
+\addplot coordinates 
+	{(10,1e-5) (20,5e-6) (40,2.5e-6)};
+\end{loglogaxis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{loglogaxis}[
+	title=With Extra Ticks; $10^e$ format,
+	extra tick style={log identify minor tick positions=false},
+	xtickten={1,2},
+	ytickten={-5,-6},
+	extra x ticks={20,40},
+	extra y ticks={5e-6,2.5e-6}]
+\addplot coordinates 
+	{(10,1e-5) (20,5e-6) (40,2.5e-6)};
+\end{loglogaxis}
+\end{tikzpicture}
+\end{document}

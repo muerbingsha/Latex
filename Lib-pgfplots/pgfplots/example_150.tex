@@ -1,0 +1,43 @@
+\documentclass{article}
+% translate with >> pdflatex -shell-escape <file>
+
+% This file is an extract of the PGFPLOTS manual, copyright by Christian Feuersaenger.
+% 
+% Feel free to use it as long as you cite the pgfplots manual properly.
+%
+% See
+%   http://pgfplots.sourceforge.net/pgfplots.pdf
+% for the complete manual.
+%
+% Any required input files (for <plot table> or <plot file> or the table package) can be downloaded
+% at
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/
+% and
+% http://www.ctan.org/tex-archive/graphics/pgf/contrib/pgfplots/doc/latex/plotdata/
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{tikzpicture}
+	\begin{axis}[
+		3d box,
+		zmax=1.4,
+		colorbar,
+		xlabel=$x$,
+		ylabel=$y$,
+		zlabel={$f(x,y) = x\cdot y$},
+		title={Using Coordinate Filters to fix $z=1.4$}]
+	% `pgfplotsexample4.dat' contains similar data as in 
+	% `pgfplotsexample4_grid.dat', but it uses a uniform
+	% matrix structure (same number of points in every scanline).
+	% See examples above for extracts.
+	\addplot3[surf,mesh/ordering=y varies] 
+		table {plotdata/pgfplotsexample4.dat};
+	\addplot3[scatter,scatter src=\thisrow{f(x)},only marks, z filter/.code={\def\pgfmathresult{1.4}}] 
+		table {plotdata/pgfplotsexample4_grid.dat};
+	\end{axis}
+\end{tikzpicture}
+\end{document}

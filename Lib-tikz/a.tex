@@ -1,0 +1,64 @@
+\documentclass[a4paper]{article}
+
+\usepackage{tikz}
+\usetikzlibrary{datavisualization}
+
+\begin{document}
+
+\begin{tikzpicture}
+	\datavisualization data group {lines} = {
+ 		data point [x=0, y=0, set=normal]
+		data point [x=2, y=2, set=normal]
+		data point [x=0, y=1, set=heated]
+		data point [x=2, y=1, set=heated]
+		data point [x=0.5, y=1.5, set=critical]
+		data point [x=2.25, y=1.75, set=critical]
+		};
+  	\datavisualization [ school book axes={unit=0.3},
+		visualize as line=normal,
+		visualize as line=heated,
+		visualize as line=critical,
+		normal={style={green}, label in legend={text={normal}}},
+		heated={style={yellow}, label in legend={text={heated}}},
+		critical={style={red}, label in legend={text={critical}}},
+		legend=north east inside]
+  		data group {lines};
+  
+ 	\datavisualization [school book axes, visualize as smooth line]
+		data [format=function]{
+			var x: interval[-1.5:1.5] samples 7;
+			func y = \value x*\value x;
+		};
+ 
+\coordinate (O) at (0, 0);
+\coordinate (P1) at (1, 0);
+\coordinate (P2) at (60:1cm);
+\coordinate (P3) at (2*60:1cm);
+\coordinate (P4) at (3*60:1cm);
+\coordinate (P5) at (4*60:1cm);
+\coordinate (P6) at (5*60:1cm);
+
+\draw (P1)--(P2)--(P3)--(P4)--(P5)--(P6)--cycle;
+\draw [color=gray] (O)--(P1) (O)--(P2) (O)--(P3) (O)--(P4) (O)--(P5) (O)--(P6);
+
+\draw (O) node [below]{O};
+\draw (P1) node [right]{P1};
+\draw (P2) node [above right]{P2};
+\draw (P3) node [above left]{P3};
+\draw (P4) node [left]{P4};
+\draw (P5) node [below left]{P5};
+\draw (P6) node [below right]{P6};
+
+
+
+	
+
+\end{tikzpicture}
+
+
+\begin{tikzpicture} [> = stealth, % arr
+
+\end{tikzpicture}
+
+\end{document}
+
