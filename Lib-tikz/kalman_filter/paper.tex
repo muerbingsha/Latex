@@ -1,0 +1,145 @@
+% Kalman filter system model
+% by Burkart Lingner
+% An example using TikZ/PGF 2.00
+%
+% Features: Decorations, Fit, Layers, Matrices, Styles
+% Tags: Block diagrams, Diagrams
+% Technical area: Electrical engineering
+
+
+\documentclass[12pt, a4paper]{article}
+
+\usepackage{graphics}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing} % fitting shapes to coordinates
+\usetikzlibrary{fit}			% fitting shapes to coordinates
+\usetikzlibrary{backgrounds} % drawing the background after the foreground
+
+
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+
+
+
+\begin{document}
+
+\begin{figure}[h]
+\centering
+
+% 1 - define
+% The state vector is represented by a blue circle.
+% "minimum size" makes sure all circles have the same size
+% independently of their contents.
+\tikzstyle{state}=[circle, thick, minimum size = 1.2cm, draw = blue!80, fill = blue!25]
+\tikzstyle{measurement}=[circle, thick, minimum size = 1.2cm, draw = orange!80, fill = orange!25]			
+\tikzstyle{input}=[circle, thick, minimum size =1.2cm, draw = purple!80, fill = purple!25]
+\tikzstyle{matrx}=[rectangle, thick, minimum size = 1cm, draw=gray!80, fill=gray!25]
+\tikzstyle{noise}=[circle, thick, minimum size=1.2cm, draw=yellow!80!black, fill=yellow!50, decorate, decoration={random steps, segment length=2pt, amplitude=2pt}]
+\tikzstyle{background}=[rectangle, fill=gray!10, inner sep=0.2cm, rounded corners=5mm]
+
+
+
+% 2 - draw			
+\begin{tikzpicture}[>=latex, text height = 1.5ex, text depth = 0.25ex]
+
+	% 2 - 1 nodes
+	\matrix[row sep = 0.5cm, column sep = 0.5cm]{
+		% First line: Control input
+		&
+		\node[input] 	(u_k-1) 	{$\mathbf{u}_{k-1}$};		&
+		& 
+		\node[input]	 (u_k)	{$\mathbf{u}_{k}$}; 		& 
+		& 
+		\node[input] 	(u_k+1)	{$\mathbf{u}_{k+1}$}; 	&
+		\\
+		
+		% Second line
+		\node[noise] 	(w_k-1)	 {$\mathbf{w}_{k-1}$}; 	&
+		\node[matrx]	 (B_k-1)	{$\mathbf{B}$};			&
+		\node[noise]	 (w_k)	{$\mathbf{w}_{k}$}; 		&
+		\node[matrx]	(B_k)	{$\mathbf{B}$};			&
+		\node[noise]	 (w_k+1)	{$\mathbf{w}_{k+1}$}; 	&
+		\node[matrx] 	(B_k+1)	{$\mathbf{B}$};			&
+		\\
+		
+		% Third line: State & state transition matrix
+		\node		(A_k-2)	{$\cdots$};			&
+		\node[state] 	(x_k-1)	{$\mathbf{x}_{k-1}$}; 	&
+		\node[matrx]	(A_k-1)	{$\mathbf{A}$}; 			&
+		\node[state] 	(x_k)		{$\mathbf{x}_{k}$}; 		&
+		\node[matrx] 	(A_k)	{$\mathbf{A}$};			&
+		\node[state]	(x_k+1)	{$\mathbf{x}_{k+1}$}; 	&
+		\node		(A_k+2)	{$\cdots$};			&
+		\\
+		
+		% Forth line
+		\node[noise]	(v_k-1)	{$\mathbf{v}_{k-1}$}; 	&
+		\node[matrx]	(H_k-1)	{$\mathbf{H}$}; 		&
+		\node[noise]	(v_k)		{$\mathbf{v}_{k}$}; 		&
+		\node[matrx]	(H_k)	{$\mathbf{H}$}; 		&
+		\node[noise]	(v_k+1)	{$\mathbf{v}_{k+1}$}; 	&
+		\node[matrx]	(H_k+1)	{$\mathbf{H}$}; 		&
+		\\
+
+		% Fifth line: Measurement
+		& 
+		\node[measurement](z_k-1){$\mathbf{z}_{k-1}$}; 	& 
+		&
+		\node[measurement](z_k){$\mathbf{z}_{k}$}; 		&
+		& 
+		\node[measurement](z_k+1){$\mathbf{z}_{k+1}$}; 	&
+		\\
+	};
+	
+	
+	% 2 - 2 arrows
+	\path[->]
+		(A_k-2) 	edge[thick] 	(x_k-1)
+		(x_k-1)	edge[thick]	(A_k-1)
+		(A_k-1)	edge[thick]	(x_k)
+		(x_k)		edge[thick]	(A_k)
+		(A_k)	edge[thick]	(x_k+1)
+		(x_k+1)	edge[thick]	(A_k+2)
+		
+		(w_k-1)	edge			(x_k-1)
+		(w_k)	edge			(x_k)
+		(w_k+1)	edge			(x_k+1)
+		
+		(v_k-1)	edge			(z_k-1)
+		(v_k)		edge			(z_k)
+		(v_k+1)	edge			(z_k+1)
+		
+		(u_k-1)	edge[thick]	(B_k-1)
+		(u_k)		edge[thick]	(B_k)
+		(u_k+1)	edge[thick]	(B_k+1)
+		(B_k-1)	edge[thick]	(x_k-1)
+		(B_k)	edge[thick]	(x_k)
+		(B_k+1)	edge[thick]	(x_k+1)
+		(x_k-1)	edge[thick]	(H_k-1)
+		(x_k)		edge[thick]	(H_k)
+		(x_k+1)	edge[thick]	(H_k+1)
+		(H_k-1)	edge[thick]	(z_k-1)
+		(H_k)	edge[thick]	(z_k)
+		(H_k+1)	edge[thick]	(z_k+1)
+		;
+		
+	% 2 - 3 background
+	\begin{pgfonlayer}{background}
+		\node [background, fit = (u_k-1) (u_k+1), label = left: Entrance:] {};
+		\node [background, fit = (w_k-1) (H_k+1)] {};
+		\node [background, fit = (z_k-1) (z_k+1), label = left: Measure:] {};
+		
+	\end{pgfonlayer}
+	
+\end{tikzpicture}
+
+
+
+\end{figure}
+
+
+\end{document}

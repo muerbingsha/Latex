@@ -1,0 +1,54 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,chains}
+
+
+\begin{document}
+	
+	\begin{figure}
+	\centering
+		\LARGE  % \tiny\scriptsize\footnotesize\small\normalsize\large\Large\LARGE\huge\Huge
+		\tikzstyle{format}=[rectangle,
+						draw,
+						thin,
+						fill=white]
+		\tikzstyle{test}=[diamond,
+						aspect=2,
+						draw,
+						thin]
+		\tikzstyle{point}=[coordinate,on grid,]
+		
+		\begin{tikzpicture}[node distance=20mm, 
+						auto,
+						>=latex,
+						thin,
+						start chain=going below,
+						every join/.style={norm},]
+			\node[format] (n0){A};
+			\node[format,below of=n0] (n1){B};
+			\node[format,below of=n1] (n2){C};
+			\node[format,below of=n2] (n3){D};
+			\node[point,right of=n3] (p0){};
+			\node[point,left of=n3] (p1){};
+			\node[format,below of=n3] (n4){E};
+			\node[format,below of=n4] (n5){F};
+			\node[format,right of=n5] (n6){G};
+			\node[test,below of=n5] (n7){H};
+			\node[point,right of=n7] (p2){};
+			\node[format,below of=n7] (n8){I};
+			
+			\draw[->] (n0.south) -- (n1);
+			\draw[->] (n1.south) -- (n2);
+			\draw[->] (n2.south) -- (n3);
+			\draw[->] (n3.south) -- (n4);
+			\draw[->] (n4.south) -- (n5);
+			\draw[->] (n5.south) -- (n7);
+			\draw[->] (n7.south) to node {Yes} (n8);
+			
+			\draw[->] (n7.east) to node {No} (p2) |- (n6.south);
+			\draw[->] (n6.north) -- (p0) |- (n3.east);
+		\end{tikzpicture}
+	\end{figure}
+\end{document}
