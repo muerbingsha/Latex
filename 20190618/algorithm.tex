@@ -1,0 +1,65 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[top=2cm, left=2cm, right=2cm, bottom=2cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{algpseudocode} % define \Procedure like macros 
+\usepackage{algorithmicx} % define "algorithmic" environment
+\usepackage{algorithm} % define "algorithm" environment
+
+
+
+
+\begin{document}
+\title{Practice of Algorithm}
+\author{Limin Deng}
+\date{}
+\maketitle
+
+
+\begin{algorithmic}
+\Require $n \geq 0$
+\Ensure $y = x^n$
+\State $y \Leftarrow 1$
+\State $X \Leftarrow x$
+\State $N \Leftarrow n$
+\While{$N \neq 0$}
+\If{$N$ is even}
+  \State $X \Leftarrow X \times X$
+  \State $N \Leftarrow \frac{N}{2} $  \Comment{This is a comment}
+\ElsIf{$N$ is odd}
+  \State $y \Leftarrow y \times X$
+  \State $N \Leftarrow N - 1$
+\EndIf
+\EndWhile
+\end{algorithmic}
+
+
+
+\begin{algorithm}
+\caption{Euclid’s algorithm}\label{euclid} % title
+\begin{algorithmic}[1] % 1 means number for every line
+\Procedure{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
+   \State $r\gets a\bmod b$
+   \While{$r\not=0$}\Comment{We have the answer if r is 0}
+      \State $a\gets b$
+      \State $b\gets r$
+      \State $r\gets a\bmod b$
+   \EndWhile\label{euclidendwhile}
+   \State \textbf{return} $b$\Comment{The gcd is b}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+
+% Practice 
+\begin{algorithm}
+\caption{Decision Tree Train(\emph{data, remaining features)}}
+\begin{algorithmic}[1]
+
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\end{document}

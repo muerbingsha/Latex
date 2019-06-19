@@ -1,9 +1,5 @@
 
-## install basicTex
-'''
-sudo tlmgr update --self
-sudo tlmgr install latexmk
-'''
+
 
 #### compile .tex in command line
 '''
@@ -24,5 +20,22 @@ https://www.ctan.org/pkg/nth
 --
 ## install Atom
 install packages **latex** / **language_latex** (highlight code) / **pdf_view**
+
+
+
+## TexShp
+### Engine
+### Templates
+## BibDesk
+Manage references
+
+## Text Live Utitility
+Manage packages
+Publication/New Publication from Clipboard ( insert reference from scholar.google )
+
+sudo tlmgr update --self
+sudo tlmgr install latexmk
+
+
 
 
